@@ -15,4 +15,9 @@ public class Combinations {
     public static <T> Iterator<List<T>> newPermutationsIterator(List<T> dictionary, int size) {
         return new PermutationsWithRepetitionIterator<>(dictionary, size);
     }
+
+    public static <T> Iterator<List<T>> newPermutationsIteratorInRange(List<T> dictionary, int from, int to) {
+        return new RangeIterator<>(from, to, size ->
+                new PermutationsWithRepetitionIterator<>(dictionary, size));
+    }
 }
