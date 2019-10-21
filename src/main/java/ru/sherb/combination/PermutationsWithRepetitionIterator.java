@@ -36,10 +36,10 @@ final class PermutationsWithRepetitionIterator<T> implements Iterator<List<T>> {
             throw new NoSuchElementException();
         }
 
-        var result = new ArrayList<T>();
-        var k = position;
+        List<T> result = new ArrayList<>();
+        long k = position;
         for (int i = size - 1; i >= 0; i--) {
-            var rank = Math.pow(dictionary.size(), i);
+            double rank = Math.pow(dictionary.size(), i);
             result.add(dictionary.get((int) (k / rank)));
             k %= rank;
         }
