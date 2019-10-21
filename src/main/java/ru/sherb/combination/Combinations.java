@@ -12,7 +12,7 @@ public class Combinations {
         throw new IllegalAccessException();
     }
 
-    public static <T> Iterator<List<T>> newPermutationsIterator(Iterable<T> dictionary, int size) {
+    public static <T> Iterator<List<T>> newPermutationsIterator(List<T> dictionary, int size) {
         return new PermutationsWithRepetitionIterator<>(dictionary, size);
     }
 }

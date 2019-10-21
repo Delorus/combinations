@@ -3,6 +3,7 @@ package ru.sherb.combination;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * @author maksim
@@ -10,72 +11,40 @@ import java.util.List;
  */
 final class PermutationsWithRepetitionIterator<T> implements Iterator<List<T>> {
 
-    private final Iterable<T> dictionary;
+    private final List<T> dictionary;
     private final int size;
+    private final long max;
 
-    private List<T> lastCombination;
-    private List<Iterator<T>> iterators;
-    private int position;
+    private long position;
 
-    public PermutationsWithRepetitionIterator(Iterable<T> dictionary, int size) {
+    public PermutationsWithRepetitionIterator(List<T> dictionary, int size) {
         this.dictionary = dictionary;
         this.size = size;
-
-        this.iterators = new ArrayList<>(size);
-        this.lastCombination = new ArrayList<>(size);
+        this.max = (long) Math.pow(dictionary.size(), size);
 
         this.position = 0;
-
-        while (lastCombination.size() != size) {
-            Iterator<T> iter = dictionary.iterator();
-            iterators.add(iter);
-            lastCombination.add(iter.next());
-        }
-        position = lastCombination.size() - 1;
     }
 
     @Override
     public boolean hasNext() {
-        return position != size - 1 || iterators.stream().anyMatch(Iterator::hasNext);
+        return position < max;
     }
-
-    private boolean first = true;
 
     @Override
     public List<T> next() {
-        if (first) {
-            first = false;
-            return lastCombination;
+        if (!hasNext()) {
+            throw new NoSuchElementException();
         }
 
-        if (position != size - 1) {
-            shiftToSize();
-            return lastCombination;
+        var result = new ArrayList<T>();
+        var k = position;
+        for (int i = size - 1; i >= 0; i--) {
+            var rank = Math.pow(dictionary.size(), i);
+            result.add(dictionary.get((int) (k / rank)));
+            k %= rank;
         }
 
-        Iterator<T> iter = iterators.get(position);
-        while (!iter.hasNext()) {
-            Iterator<T> newIter = dictionary.iterator();
-            lastCombination.set(position, newIter.next());
-            iterators.set(position, newIter);
-
-            position--;
-            iter = iterators.get(position);
-        }
-
-        lastCombination.set(position, iter.next());
-
-        return List.copyOf(lastCombination);
-    }
-
-    private void shiftToSize() {
         position++;
-        for (; position < size - 1; position++) {
-            Iterator<T> iter = dictionary.iterator();
-            iterators.set(position, iter);
-            lastCombination.set(position, iter.next());
-        }
-        lastCombination.set(position, iterators.get(position).next());
+        return result;
     }
-
 }
