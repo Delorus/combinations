@@ -17,7 +17,7 @@ final class PermutationsWithRepetitionIterator<T> implements Iterator<List<T>> {
 
     private long position;
 
-    public PermutationsWithRepetitionIterator(List<T> dictionary, int size) {
+    PermutationsWithRepetitionIterator(List<T> dictionary, int size) {
         this.dictionary = dictionary;
         this.size = size;
         this.max = (long) Math.pow(dictionary.size(), size);

@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  * @author maksim
  * @since 21.10.2019
  */
-class RangeIterator<T> implements Iterator<List<T>> {
+final class RangeIterator<T> implements Iterator<List<T>> {
 
     @FunctionalInterface
     public interface IteratorGenerator<T> {
@@ -21,7 +21,7 @@ class RangeIterator<T> implements Iterator<List<T>> {
     private Iterator<List<T>> currentIter;
     private int currentSize;
 
-    public RangeIterator(int from, int to, IteratorGenerator<T> generator) {
+    RangeIterator(int from, int to, IteratorGenerator<T> generator) {
         this.generator = generator;
         this.currentSize = from;
         this.maxSize = to;
